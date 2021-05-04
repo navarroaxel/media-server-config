@@ -1,0 +1,81 @@
+version: "3.4"
+services:
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr
+    deploy:
+      placement:
+         constraints:
+           -node.labels.pi4 == true
+           -node.labels.disk == true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - /mnt/nas/media/sonarr/data:/config
+      - /mnt/nas/media/libraries/series:/tv
+      - /mnt/nas/media/transmission/downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  jackett:
+    image: ghcr.io/linuxserver/jackett
+    deploy:
+      placement:
+         constraints:
+           -node.labels.pi4 == true
+           -node.labels.disk == true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Argentina/Buenos_Aires
+      - AUTO_UPDATE=true
+    volumes:
+      - /mnt/nas/media/jackett/config:/config
+      - /mnt/nas/media/jackett/downloads:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+
+  radarr:
+    image: ghcr.io/linuxserver/radarr
+    deploy:
+      placement:
+         constraints:
+           -node.labels.pi4 == true
+           -node.labels.disk == true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - /mnt/nas/media/radarr/data:/config
+      - /mnt/nas/media/libraries/movies:/movies
+      - /mnt/nas/media/transmission/downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  bazarr:
+    image: ghcr.io/linuxserver/bazarr
+    deploy:
+      placement:
+         constraints:
+           -node.labels.pi4 == true
+           -node.labels.disk == true
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - /mnt/nas/media/bazarr/data:/config
+      - /mnt/nas/media/libraries/movies:/movies
+      - /mnt/nas/media/libraries/series:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped

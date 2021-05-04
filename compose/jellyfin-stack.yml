@@ -1,0 +1,18 @@
+version: "3.4"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        order: stop-first
+    user: 1000:1000
+    network_mode: "host"
+    volumes:
+      - /mnt/nas/media/jellyfin/config:/config:z
+      - /mnt/nas/media/jellyfin/cache:/cache:z
+      - /mnt/nas/media/libraries:/media:z
+    ports:
+      - 8096:8096
+    restart: "unless-stopped"

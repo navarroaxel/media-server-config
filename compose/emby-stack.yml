@@ -1,0 +1,22 @@
+version: "3.4"
+services:
+  emby:
+    image: ghcr.io/linuxserver/emby
+    container_name: emby
+    deploy:
+      placement:
+         constraints:
+           -node.labels.pi4 == true
+           -node.labels.disk == true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - /mnt/nas/media/emby/config:/config:z
+      - /mnt/nas/media/libraries:/media:z
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+    restart: unless-stopped

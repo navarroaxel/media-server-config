@@ -1,0 +1,23 @@
+version: "3.4"
+services:
+  transmission:
+    image: ghcr.io/linuxserver/transmission
+    container_name: transmission
+    deploy:
+      placement:
+         constraints:
+           -node.labels.pi4 == true
+           -node.labels.disk == true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - /mnt/nas/media/transmission/config:/config
+      - /mnt/nas/media/transmission/downloads:/downloads
+      - /mnt/nas/media/transmission/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
