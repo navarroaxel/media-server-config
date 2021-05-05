@@ -6,8 +6,8 @@ services:
     deploy:
       placement:
          constraints:
-           -node.labels.pi4 == true
-           -node.labels.disk == true
+           - node.labels.pi4 == true
+           - node.labels.disk == true
     environment:
       - PUID=1000
       - PGID=1000
